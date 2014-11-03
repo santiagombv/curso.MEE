@@ -1,4 +1,4 @@
 curso.MEE
 =========
 
-Curso Métodos en Ecología Evolutiva
+Curso M??todos en Ecolog??a Evolutiva
