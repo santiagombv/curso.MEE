@@ -8,7 +8,8 @@ output:
     logo: /home/santiago/Dropbox/Photos/g3458.png
 runtime: shiny
 ---
-## El origen de los rasgos cuantitativos
+## Rasgos cuantitativos. 
+Modelo infinitesimal de Fisher
 
 ```{r, echo =FALSE}
 library(shiny)
@@ -19,16 +20,25 @@ sliderInput("genes", label = "genes", min=1, max=15, value =2, step = 1),
 sliderInput("ale", label = "alelos", min=2, max=5, value =2, step = 1), width = 3),
 mainPanel(
 renderPlot({
-alelos <- seq(0,input$ale-1)
-lista<- list(input$genes)
-for(i in 1:input$genes) lista[[i]]<-alelos
-tab <- expand.grid(lista)
-phenotype <- apply(tab, 1, sum)
-G <- ggplot(data=data.frame(phenotype), aes(x=phenotype)) + geom_histogram()
-G <- G + theme_bw()
-G
-}), width = 9), position = "left")
+if(input$ale*input$genes < 31){  
+      alelos <- seq(0,input$ale-1)
+      lista<- list(input$genes)
+      for(i in 1:input$genes) lista[[i]]<-alelos
+      tab <- expand.grid(lista)
+      phenotype <- apply(tab, 1, sum)
+      G <- ggplot(data=data.frame(phenotype), aes(x=phenotype)) + geom_histogram()
+      G <- G + theme_bw()
+      suppressMessages(print(G))} else {
+        plot.new()
+        text(0.5, 0.5, "demasiadas combinaciones")
+      }
+      }), width = 9), position = "left")
 
 ``` 
 
----
+# Selección sobre caracteres cuantitativos
+
+## Diferenciales de selección
+
+
+
