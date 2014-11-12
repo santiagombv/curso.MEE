@@ -8,8 +8,33 @@ output:
     logo: /home/santiago/Dropbox/Photos/g3458.png
 runtime: shiny
 ---
-## Rasgos cuantitativos. 
-Modelo infinitesimal de Fisher
+
+# On the origin of species |Chap. 4. pp. 80-81
+
+***
+<div class="blue3">
+> Let it be borne in mind in what an endless number of strange peculiarities our domestic productions, and, in a lesser degree, those under nature, vary; and how strong the hereditary tendency is. (…)  how infinitely complex and close-fitting are the mutual relations of all organic beings to each other and to their physical conditions of life. Can it, then, be thought improbable, seeing that variations useful to man have undoubtedly occurred, that other variations useful in some way to each being in the great and complex battle of life, should sometimes occur in the course of thousands of generations? If such do occur, can we doubt (remembering that many more individuals are born than can possibly survive) that individuals having any advantage, however slight, over others, would have the best chance of surviving and of procreating their kind? On the other hand, we may feel sure that any variation in the least degree injurious would be rigidly destroyed. This preservation of favourable variations and the rejection of injurious variations, I call Natural Selection. 
+
+</div> 
+***
+<div class="blue3">
+* [heritable] variations (...) should sometimes occurr.
+* (...) many more individuals are born than can possibly survive. 
+* individuals having any advantage (...) would have the best chance of surviving and of procreating their kind
+</div> 
+<div class="red2">
+* How strong the hereditary tendency is (?)
+</div> 
+
+## Mendel 1865 (1900)
+![mendel](http://upload.wikimedia.org/wikipedia/commons/d/d3/Gregor_Mendel.png)
+
+## Síntesis Moderna 
+*Fisher (1918) The Correlation Between Relatives on the Supposition of Mendelian Inheritance*  
+
+![sm](http://objetos.unam.mx/biologia/antecedentesEvolucion/img/fichas/poblaciones.png)
+
+## Rasgos cuantitativos |Modelo infinitesimal de Fisher
 
 ```{r, echo =FALSE}
 library(shiny)
@@ -38,7 +63,39 @@ if(input$ale*input$genes < 31){
 
 # Selección sobre caracteres cuantitativos
 
-## Diferenciales de selección
-
-
-
+## Diferenciales de selección lineal $s_{i}$
+```{r eval=TRUE, echo=FALSE}
+library(shiny)
+library(ggplot2)
+library(gridExtra, quietly =T)
+sidebarLayout(
+sidebarPanel(
+sliderInput("SOB", label = "sobrevivientes", min=0., max=0.99, value = 0, step = 0.01), width = 3),
+mainPanel(
+renderPlot({
+  H <- input$SOB
+  Z <- rnorm(3000)
+  Zb <- Z[Z > quantile(Z, probs = H)]
+  Y <- rep(0, length(Z) + length(Zb))
+  fac <- c(rep("antes", 3000), rep("después", length(Zb)))
+  dat <- data.frame(ind = c(Z, Zb), pres = fac, Y = Y)
+  o <- order(dat$ind)
+  m <- qplot(ind, ..count.., data= dat, geom="density", fill=pres, adjust = 4) 
+  m <- m + geom_vline(xintercept = 0) + geom_vline(xintercept = mean(Zb))
+  m <- m + xlim(-4, 4) + theme_bw() 
+  m <- m + theme(legend.position="top", axis.text.y=element_blank(), 
+                 axis.title.y = element_blank(), axis.title.x = element_blank(),
+                 legend.title = element_blank()) 
+  
+  n <- qplot(x=ind, y = Y, data=dat[o,], geom="point", color =pres, position="jitter")
+  n  <- n + geom_segment(aes(x = 0, y = 0, xend = mean(Zb) , yend = 0, size=4), color ="black") 
+  n <- n + xlim(-4, 4) + theme_bw()
+  n <- n + theme(legend.position="none", axis.title.y=element_blank(), 
+                 axis.text.y=element_blank()) 
+  
+  grid.arrange(m, n, heights=c(3/4, 1/4), ncol=1)
+  }), width = 9), position = "left")
+``` 
+  
+***
+ 
