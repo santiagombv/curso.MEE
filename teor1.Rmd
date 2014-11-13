@@ -74,10 +74,10 @@ sliderInput("SOB", label = "sobrevivientes", min=0., max=0.99, value = 0, step =
 mainPanel(
 renderPlot({
   H <- input$SOB
-  Z <- rnorm(3000)
+  Z <- rnorm(1000)
   Zb <- Z[Z > quantile(Z, probs = H)]
   Y <- rep(0, length(Z) + length(Zb))
-  fac <- c(rep("antes", 3000), rep("después", length(Zb)))
+  fac <- c(rep("antes", 1000), rep("después", length(Zb)))
   dat <- data.frame(ind = c(Z, Zb), pres = fac, Y = Y)
   o <- order(dat$ind)
   m <- qplot(ind, ..count.., data= dat, geom="density", fill=pres, adjust = 4) 
@@ -104,26 +104,25 @@ library(ggplot2)
 library(gridExtra, quietly =T)
 sidebarLayout(
 sidebarPanel(
-checkboxGroupInput("SEL", label = h3("selección"), choices = list("Disruptiva" = 0, "Estabilizadora" = 1), selected = 0),
 sliderInput("SOB", label = "sobrevivientes", min=0., max=0.99, value = 0, step = 0.01), width = 3),
 mainPanel(
 renderPlot({
-  H <- input$SOB/2
-  Z <- rnorm(3000)
-  Zb <- Z[Z < quantile(Z, probs = H) | Z > quantile(Z, probs = 1-H)]*as.numeric(input$SEL)
-  Y <- rep(0, length(Z) + length(Zb))
-  fac <- c(rep("antes", 3000), rep("después", length(Zb)))
-  dat <- data.frame(ind = c(Z, Zb), pres = fac, Y = Y)
-  o <- order(dat$ind)
-  m <- qplot(ind, ..count.., data= dat, geom="density", fill=pres, adjust = 4) 
-  m <- m + geom_vline(xintercept = 0) + geom_vline(xintercept = mean(Zb))
+  H2 <- input$SOB
+  Z2 <- rnorm(1000)
+  Zb2 <- Z2[Z2 > quantile(Z2, probs = H2)]
+  Y2 <- rep(0, length(Z2) + length(Zb2))
+  fac2 <- c(rep("antes", 1000), rep("después", length(Zb2)))
+  dat2 <- data.frame(ind = c(Z2, Zb2), pres = fac2, Y = Y2)
+  o <- order(dat2$ind)
+  m <- qplot(ind, ..count.., data= dat2, geom="density", fill=pres, adjust = 4) 
+  m <- m + geom_vline(xintercept = 0) + geom_vline(xintercept = mean(Zb2))
   m <- m + xlim(-4, 4) + theme_bw() 
   m <- m + theme(legend.position="top", axis.text.y=element_blank(), 
                  axis.title.y = element_blank(), axis.title.x = element_blank(),
                  legend.title = element_blank()) 
   
-  n <- qplot(x=ind, y = Y, data=dat[o,], geom="point", color =pres, position="jitter")
-  n  <- n + geom_segment(aes(x = 0, y = 0, xend = mean(Zb) , yend = 0, size=4), color ="black") 
+  n <- qplot(x=ind, y = Y, data=dat2[o,], geom="point", color =pres, position="jitter")
+  n  <- n + geom_segment(aes(x = 0, y = 0, xend = mean(Zb2) , yend = 0, size=4), color ="black") 
   n <- n + xlim(-4, 4) + theme_bw()
   n <- n + theme(legend.position="none", axis.title.y=element_blank(), 
                  axis.text.y=element_blank()) 
@@ -131,6 +130,7 @@ renderPlot({
   grid.arrange(m, n, heights=c(3/4, 1/4), ncol=1)
   }), width = 9), position = "left")
 ``` 
+
   
 ***
- 
+  selectInput("SEL", label = h3("selección"), choices = list("Disruptiva" = 0, "Estabilizadora" = 1), selected = 0)
