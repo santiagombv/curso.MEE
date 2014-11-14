@@ -13,7 +13,7 @@ runtime: shiny
 
 ***
 <div class="blue3">
-> Let it be borne in mind in what an endless number of strange peculiarities our domestic productions, and, in a lesser degree, those under nature, vary; and how strong the hereditary tendency is. (…)  how infinitely complex and close-fitting are the mutual relations of all organic beings to each other and to their physical conditions of life. Can it, then, be thought improbable, seeing that variations useful to man have undoubtedly occurred, that other variations useful in some way to each being in the great and complex battle of life, should sometimes occur in the course of thousands of generations? If such do occur, can we doubt (remembering that many more individuals are born than can possibly survive) that individuals having any advantage, however slight, over others, would have the best chance of surviving and of procreating their kind? On the other hand, we may feel sure that any variation in the least degree injurious would be rigidly destroyed. This preservation of favourable variations and the rejection of injurious variations, I call Natural Selection. 
+> Let it be borne in mind in what an endless number of strange peculiarities our domestic productions, and, in a lesser degree, those under nature, vary; and how strong the hereditary tendency is. (???)  how infinitely complex and close-fitting are the mutual relations of all organic beings to each other and to their physical conditions of life. Can it, then, be thought improbable, seeing that variations useful to man have undoubtedly occurred, that other variations useful in some way to each being in the great and complex battle of life, should sometimes occur in the course of thousands of generations? If such do occur, can we doubt (remembering that many more individuals are born than can possibly survive) that individuals having any advantage, however slight, over others, would have the best chance of surviving and of procreating their kind? On the other hand, we may feel sure that any variation in the least degree injurious would be rigidly destroyed. This preservation of favourable variations and the rejection of injurious variations, I call Natural Selection. 
 
 </div> 
 ***
@@ -63,74 +63,63 @@ if(input$ale*input$genes < 31){
 
 # Selección sobre caracteres cuantitativos
 
-## Diferenciales de selección lineal $s_{i}$
+## Diferenciales de selección |lineal $s_{i}$ y cuadrática $c_{i}$
 ```{r eval=TRUE, echo=FALSE}
 library(shiny)
 library(ggplot2)
 library(gridExtra, quietly =T)
 sidebarLayout(
 sidebarPanel(
-sliderInput("SOB", label = "sobrevivientes", min=0., max=0.99, value = 0, step = 0.01), width = 3),
+selectInput("tipo", label ="tipo de selección", 
+            choices=c(positiva = "Zp", negativa = "Zn", estabilizadora = "Ze", disruptiva = "Zd")),
+sliderInput("SOB", label = "% post selección", min=1, max=100, value = 100, step = 1), width = 3),
 mainPanel(
 renderPlot({
-  H <- input$SOB
-  Z <- rnorm(1000)
-  Zb <- Z[Z > quantile(Z, probs = H)]
-  Y <- rep(0, length(Z) + length(Zb))
-  fac <- c(rep("antes", 1000), rep("después", length(Zb)))
-  dat <- data.frame(ind = c(Z, Zb), pres = fac, Y = Y)
-  o <- order(dat$ind)
-  m <- qplot(ind, ..count.., data= dat, geom="density", fill=pres, adjust = 4) 
-  m <- m + geom_vline(xintercept = 0) + geom_vline(xintercept = mean(Zb))
-  m <- m + xlim(-4, 4) + theme_bw() 
-  m <- m + theme(legend.position="top", axis.text.y=element_blank(), 
-                 axis.title.y = element_blank(), axis.title.x = element_blank(),
-                 legend.title = element_blank()) 
-  
-  n <- qplot(x=ind, y = Y, data=dat[o,], geom="point", color =pres, position="jitter")
-  n  <- n + geom_segment(aes(x = 0, y = 0, xend = mean(Zb) , yend = 0, size=4), color ="black") 
-  n <- n + xlim(-4, 4) + theme_bw()
-  n <- n + theme(legend.position="none", axis.title.y=element_blank(), 
-                 axis.text.y=element_blank()) 
-  
-  grid.arrange(m, n, heights=c(3/4, 1/4), ncol=1)
-  }), width = 9), position = "left")
-``` 
-  
-## Diferenciales de selección cuadrática $c_{i}$
-```{r eval=TRUE, echo=FALSE}
-library(shiny)
-library(ggplot2)
-library(gridExtra, quietly =T)
-sidebarLayout(
-sidebarPanel(
-sliderInput("SOB", label = "sobrevivientes", min=0., max=0.99, value = 0, step = 0.01), width = 3),
-mainPanel(
-renderPlot({
-  H2 <- input$SOB
-  Z2 <- rnorm(1000)
-  Zb2 <- Z2[Z2 > quantile(Z2, probs = H2)]
-  Y2 <- rep(0, length(Z2) + length(Zb2))
-  fac2 <- c(rep("antes", 1000), rep("después", length(Zb2)))
-  dat2 <- data.frame(ind = c(Z2, Zb2), pres = fac2, Y = Y2)
+  H <- input$SOB/100
+  N <- 200
+  Z <- rnorm(N)
+  Zp <- Z[Z > quantile(Z, probs = 1-H)]
+  Zn <- Z[Z < quantile(Z, probs = H)]
+  Ze <- Z[Z > quantile(Z, probs = (1-H)/2) & Z < quantile(Z, probs = H + (1-H)/2)]
+  Zd <- Z[Z < quantile(Z, probs = (H)/2) | Z > quantile(Z, probs = 1-(H/2))]
+  dat1 <- data.frame(Z,
+                     Zp = c(Zp, rep(NA, N-length(Zp))),
+                     Zn = c(Zn, rep(NA, N-length(Zn))),
+                     Ze = c(Ze, rep(NA, N-length(Ze))),
+                     Zd = c(Zd, rep(NA, N-length(Zd))))
+  dat2 <- data.frame(ind = c(dat1$Z, dat1[, input$tipo]),
+                     pres = c(rep("antes", N), rep("despues", N)),
+                     Y = rep(0, N*2))  
   o <- order(dat2$ind)
   m <- qplot(ind, ..count.., data= dat2, geom="density", fill=pres, adjust = 4) 
-  m <- m + geom_vline(xintercept = 0) + geom_vline(xintercept = mean(Zb2))
-  m <- m + xlim(-4, 4) + theme_bw() 
+  m <- m + geom_vline(xintercept = 0) 
+  m <- m + geom_vline(xintercept = mean(subset(dat2$ind, dat2$pres == "despues"), na.rm=T))
+  m <- m + xlim(-5, 5) + theme_bw() 
   m <- m + theme(legend.position="top", axis.text.y=element_blank(), 
                  axis.title.y = element_blank(), axis.title.x = element_blank(),
                  legend.title = element_blank()) 
   
   n <- qplot(x=ind, y = Y, data=dat2[o,], geom="point", color =pres, position="jitter")
-  n  <- n + geom_segment(aes(x = 0, y = 0, xend = mean(Zb2) , yend = 0, size=4), color ="black") 
-  n <- n + xlim(-4, 4) + theme_bw()
+  n  <- n + geom_segment(aes(x = 0, y = 0, 
+                             xend = mean(subset(dat2$ind, dat2$pres == "despues"), na.rm=T),
+                             yend = 0, size=4), color ="black") 
+  n <- n + xlim(-5, 5) + theme_bw()
   n <- n + theme(legend.position="none", axis.title.y=element_blank(), 
                  axis.text.y=element_blank()) 
   
-  grid.arrange(m, n, heights=c(3/4, 1/4), ncol=1)
+  k <- qplot(x=ind, y = Y, data=dat2[o,], geom="point", color =pres, position="jitter")
+  k  <- k + geom_segment(aes(x = -1, y = 0.2, xend = 1, yend = 0.2, size = 4), 
+                         color ="red") 
+  k  <- k + geom_segment(aes(y= -0.2, yend= -0.2,
+                           x = - sd(subset(dat2$ind, dat2$pres == "despues"), na.rm=T),
+                           xend = sd(subset(dat2$ind, dat2$pres == "despues"), na.rm=T),
+                           size = 4), color ="blue") 
+  k <- k + xlim(-5, 5) + theme_bw()
+  k <- k + theme(legend.position="none", axis.title.y=element_blank(), 
+                axis.text.y=element_blank()) 
+  
+  grid.arrange(m, n, k, heights=c(3/5, 1/5, 1/5), ncol=1)
   }), width = 9), position = "left")
 ``` 
 
-  
 ***
-  selectInput("SEL", label = h3("selección"), choices = list("Disruptiva" = 0, "Estabilizadora" = 1), selected = 0)
