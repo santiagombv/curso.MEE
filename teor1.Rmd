@@ -123,3 +123,42 @@ renderPlot({
 ``` 
 
 ***
+
+* Esta primera simulación corresponde a selección utilizando una medida de fitness binaria (sobreviven/no sobreviven).
+* En este caso es fácil calcular las medias poblacionales antes y depués del evento selectivo.
+* Pero qué ocurre cuando el fitness tiene valores diferentes de 0 y 1? 
+
+## Ecuación de Price (1970)
+
+> An equation is presented which gives gene-frequency change under selection from one generation to the next for a single gene or for any linear function of any number of genes at any number of loci. The equation "holds for any sort of dominance or epistasis, for sexual or asexual reproduction, for random or nonrandom mating, for diploid, haploid or polyploid species." The derivation of the equation is given.
+  
+$\Delta \bar{z} = \bar{z}' - \bar{z}$  
+$\Delta \bar{z} = \sum q'_{i} z'_{i} - \sum q_{i} z_{i}$  
+$\Delta \bar{z} = \sum q'_{i} (z'_{i} - z_{i}) + \sum q'_{i} z_{i} - \sum q_{i} z_{i}$  
+$\Delta \bar{z} = \sum q'_{i} (\Delta z_{i}) + \sum (\Delta q_{i}) z_{i}$  
+  
+<div class="blue2">  
+$\sum q'_{i} (\Delta z_{i}) = \sum q_{i} (w / \bar{w}) (\Delta z_{i}) = E (w \Delta z) / \bar{w}$  
+</div>
+  
+<div class="red2">
+$\sum (\Delta q_{i}) z_{i} = \sum q_{i} (w / \bar{w} -1) z_{i} = cov(w / \bar{w}, z)$  
+</div>
+
+***
+<div class="red2">
+$$s_{i} = cov(w, z)$$
+</div>
+
+Z <- rnorm(100)
+W <- 10 + Z + rnorm(100, sd=0.4)
+plot(Z, W)
+abline(lm(W~Z))
+
+s <-cov(W, Z)
+Z2 <- Z+s
+plot(density(Z))
+points(density(Z2), type = "l")
+
+***
+
