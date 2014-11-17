@@ -145,20 +145,73 @@ $\sum q'_{i} (\Delta z_{i}) = \sum q_{i} (w / \bar{w}) (\Delta z_{i}) = E (w \De
 $\sum (\Delta q_{i}) z_{i} = \sum q_{i} (w / \bar{w} -1) z_{i} = cov(w / \bar{w}, z)$  
 </div>
 
-***
 <div class="red2">
-$$s_{i} = cov(w, z)$$
+##$s_{i} = cov(w, z)$
 </div>
 
+```{r eval=TRUE, echo=FALSE}
+library(shiny)
+library(ggplot2)
+library(gridExtra, quietly =T)
+sidebarLayout(
+sidebarPanel(
+sliderInput("dif", label = "diferencial s", min=-2, max=2, value = 0, step = 0.01), width = 3),
+mainPanel(
+renderPlot({
 Z <- rnorm(100)
-W <- 10 + Z + rnorm(100, sd=0.4)
-plot(Z, W)
-abline(lm(W~Z))
+W <- 10 + input$dif*Z + rnorm(100, sd=0.4)
 
-s <-cov(W, Z)
-Z2 <- Z+s
-plot(density(Z))
-points(density(Z2), type = "l")
+a <- qplot(x=Z, y = W, geom="point") 
+a <- a + geom_smooth(method="lm") + theme_bw() + ylim(6.5, 12)
 
-***
+ZZ <- data.frame(Z = c(Z, Z + input$dif), X= c(rep("antes", 100), rep("después", 100)))
 
+b <- qplot(Z, ..count.., geom="density", data = ZZ, adjust = 4, fill= X) 
+b <- b + theme_bw() + theme(legend.position = "top",  legend.title = element_blank())
+b <- b + geom_vline(xintercept = 0) 
+b <- b + geom_vline(xintercept = mean(subset(ZZ$Z, ZZ$X == "después"), na.rm=T))
+
+grid.arrange(a, b, ncol=2)
+  }), width = 9), position = "left")
+``` 
+
+# Introduciendo la heredabilidad
+
+## 
+```{r eval=TRUE, echo=FALSE}
+library(shiny)
+library(ggplot2)
+library(gridExtra, quietly =T)
+sidebarLayout(
+sidebarPanel(
+sliderInput("dif", label = "diferencial", min=-2, max=2, value = 2, step = 0.01), 
+sliderInput("her", label = "heredabilidad", min=0, max=1, value = 1, step = 0.01), 
+width = 3),
+mainPanel(
+renderPlot({
+Z <- rnorm(100)
+
+#ZZ <- data.frame(Z = c(Z, Z + 2, Z + 2*0.8), X= c(rep("antes", 100), rep("después", 100), rep("hijos", 100)))
+s <- input$dif
+h <- input$her
+ZZ <- data.frame(Z = c(Z, Z + s, Z + s*h), X= c(rep("antes", 100), rep("después", 100), rep("hijos", 100)))
+
+b <- qplot(Z, ..count.., geom="density", data = ZZ, adjust = 3, color= X) 
+b <- b + theme_bw() + theme(legend.position = "top",  legend.title = element_blank())
+b <- b + geom_vline(xintercept = 0) + xlim(c(-5,5))
+#b <- b + geom_vline(xintercept = mean(subset(ZZ$Z, ZZ$X == "después"), na.rm=T), color ="blue")
+#b <- b + geom_vline(xintercept = mean(subset(ZZ$Z, ZZ$X == "hijos"), na.rm=T), color="red")
+b
+
+
+#m <- qplot(ind, ..count.., data= dat2, geom="density", fill=pres, adjust = 4) 
+#  m <- m + geom_vline(xintercept = 0) 
+#  m <- m + geom_vline(xintercept = mean(subset(dat2$ind, dat2$pres == "despues"), na.rm=T))
+#  m <- m + xlim(-5, 5) + theme_bw() 
+#  m <- m + theme(legend.position="top", axis.text.y=element_blank(), 
+#                 axis.title.y = element_blank(), axis.title.x = element_blank(),
+#                legend.title = element_blank()) 
+  
+
+  }), width = 9), position = "left")
+``` 
