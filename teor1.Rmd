@@ -145,9 +145,8 @@ $\sum q'_{i} (\Delta z_{i}) = \sum q_{i} (w / \bar{w}) (\Delta z_{i}) = E (w \De
 $\sum (\Delta q_{i}) z_{i} = \sum q_{i} (w / \bar{w} -1) z_{i} = cov(w / \bar{w}, z)$  
 </div>
 
-<div class="red2">
 ##$s_{i} = cov(w, z)$
-</div>
+La pendiente de la regresión equivale a la diferencia de medias
 
 ```{r eval=TRUE, echo=FALSE}
 library(shiny)
@@ -164,54 +163,82 @@ W <- 10 + input$dif*Z + rnorm(100, sd=0.4)
 a <- qplot(x=Z, y = W, geom="point") 
 a <- a + geom_smooth(method="lm") + theme_bw() + ylim(6.5, 12)
 
-ZZ <- data.frame(Z = c(Z, Z + input$dif), X= c(rep("antes", 100), rep("después", 100)))
-
-b <- qplot(Z, ..count.., geom="density", data = ZZ, adjust = 4, fill= X) 
-b <- b + theme_bw() + theme(legend.position = "top",  legend.title = element_blank())
+b <- ggplot() + geom_density(aes(x=x, y = ..count..), colour="red", adjust = 4, fill= "red", alpha = 0.5, data=data.frame(x=rnorm(200, 0, 0.5), grp="x")) + xlim(c(-4, 4))
+b <- b + geom_density(aes(x=x, y = ..count..), colour="blue3", adjust = 4, fill = "blue3", alpha = 0.5, data= data.frame(x=rnorm(100, input$dif, 0.5), grp="x"))
 b <- b + geom_vline(xintercept = 0) 
-b <- b + geom_vline(xintercept = mean(subset(ZZ$Z, ZZ$X == "después"), na.rm=T))
-
+b <- b + geom_vline(xintercept = input$dif) 
+b <- b + theme_bw() 
 grid.arrange(a, b, ncol=2)
   }), width = 9), position = "left")
 ``` 
 
+
 # Introduciendo la heredabilidad
 
-## 
+##$\Delta \bar{z} = h^2 s$
+El cambio evolutivo depende de la heredabilidad y la selección
+ 
 ```{r eval=TRUE, echo=FALSE}
-library(shiny)
 library(ggplot2)
 library(gridExtra, quietly =T)
+
 sidebarLayout(
-sidebarPanel(
-sliderInput("dif", label = "diferencial", min=-2, max=2, value = 2, step = 0.01), 
-sliderInput("her", label = "heredabilidad", min=0, max=1, value = 1, step = 0.01), 
-width = 3),
-mainPanel(
-renderPlot({
-Z <- rnorm(100)
 
-#ZZ <- data.frame(Z = c(Z, Z + 2, Z + 2*0.8), X= c(rep("antes", 100), rep("después", 100), rep("hijos", 100)))
-s <- input$dif
-h <- input$her
-ZZ <- data.frame(Z = c(Z, Z + s, Z + s*h), X= c(rep("antes", 100), rep("después", 100), rep("hijos", 100)))
+  sidebarPanel(
 
-b <- qplot(Z, ..count.., geom="density", data = ZZ, adjust = 3, color= X) 
-b <- b + theme_bw() + theme(legend.position = "top",  legend.title = element_blank())
-b <- b + geom_vline(xintercept = 0) + xlim(c(-5,5))
-#b <- b + geom_vline(xintercept = mean(subset(ZZ$Z, ZZ$X == "después"), na.rm=T), color ="blue")
-#b <- b + geom_vline(xintercept = mean(subset(ZZ$Z, ZZ$X == "hijos"), na.rm=T), color="red")
-b
+    sliderInput("DIF", label = "diferencial", min=-2, max=2, value = 2, step = 0.01), 
+    sliderInput("her", label = "heredabilidad", min=0, max=1, value = 0.5, step = 0.01), 
+    width = 3),
 
+  mainPanel(
 
-#m <- qplot(ind, ..count.., data= dat2, geom="density", fill=pres, adjust = 4) 
-#  m <- m + geom_vline(xintercept = 0) 
-#  m <- m + geom_vline(xintercept = mean(subset(dat2$ind, dat2$pres == "despues"), na.rm=T))
-#  m <- m + xlim(-5, 5) + theme_bw() 
-#  m <- m + theme(legend.position="top", axis.text.y=element_blank(), 
-#                 axis.title.y = element_blank(), axis.title.x = element_blank(),
-#                legend.title = element_blank()) 
-  
-
+    renderPlot({
+      h <- ggplot() + geom_density(aes(x=x, y = ..count..), colour="red", adjust = 4, fill= "red", alpha = 0.5, data=data.frame(x=rnorm(200, 0, 0.5), grp="x")) + xlim(c(-4, 4))
+      h <- h + geom_density(aes(x=x, y = ..count..), colour="blue3", adjust = 4, fill = "blue3", alpha = 0.5, data= data.frame(x=rnorm(100, input$DIF, 0.5), grp="x"))
+      h <- h + geom_density(aes(x=x, y = ..count..), colour="green4", adjust = 4, fill= "green4", alpha=0.5, data= data.frame(x=rnorm(200, input$her * input$DIF, 0.5), grp="x"))
+      h <- h + theme_bw() 
+      h <- h + geom_vline(xintercept = 0) 
+      h <- h + geom_vline(xintercept = input$DIF) 
+      h <- h + geom_vline(xintercept = input$DIF * input$her)
+      h
   }), width = 9), position = "left")
-``` 
+```   
+  
+##$\Delta \bar{z} = h^2 s$
+$s = 1$    
+$h^2 = 0.5$  
+
+```{r eval=TRUE, echo=FALSE}
+
+za <- rnorm(100, 0, 0.8)
+zb <- rnorm(100, 1, 0.8)
+Z1 <- c(za, zb)
+Z2 <- Z1*0.5 + rnorm(200, sd=0.3)  
+plot(Z1, Z2, pch=20, col = c(rep("black", 100), rep("red", 100)),
+     xlab="padres", ylab="hijos")
+fit<-lm(Z2 ~ -1+Z1)
+abline(fit)
+segments(x0=0, x1=0, y0=-2, y1=0, lwd=2, col="blue")
+segments(x0=1, x1=1, y0=-2, y1=predict(fit, data.frame(Z1=1)), lwd=2, col="blue")
+segments(x0=-5, x1=0, y0=0, y1=0, lwd=2, col="blue")
+segments(x0=-5, x1=1, y0=predict(fit, data.frame(Z1=1)), y1=predict(fit, data.frame(Z1=1)), lwd=2, col="blue")
+text(x= 0.5, y = -0.8, "selección")
+text(x= -1.5, y = 0.25, "respuesta")
+```   
+
+#Introducinedo los gradientes de selección|Lande y Arnold (1983)
+
+## Lande & Arnold (1983)|The measurement of selection on correlated characteres.   
+  
+> (…) selection  on  a particular trait produces not  only  a  direct effect  on  the  distribution of  that  trait in  a population,  but  also  produces indirect  effects  on  the  distribution  of  correlated characters. The  problem of  character correlations  has  been  largely  ignored  in  current methods for measuring natural selection  on  quantitative  traits.  Selection  has usually  been  treated as  if  it  acted  only  on single  characters. 
+  
+    
+<div class="red2"> 
+$$w = \alpha + \sum{\beta_{i}z_{i}} + 1/2\sum{\gamma_{ii}z^2_{i}} + \sum\sum{\gamma_{ij}z_{i}z_{j}} + \epsilon$$
+</div> 
+
+$\beta_{i}$ lineal o direccional  
+$\gamma_{ii}$ no lineal, estabilizadora/disruptiva  
+$\gamma_{ij}$ no lineal, correlacional  
+
+***
