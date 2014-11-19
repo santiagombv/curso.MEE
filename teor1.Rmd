@@ -241,4 +241,143 @@ $\beta_{i}$ lineal o direccional
 $\gamma_{ii}$ no lineal, estabilizadora/disruptiva  
 $\gamma_{ij}$ no lineal, correlacional  
 
+
+## $\beta_{i}$ Gradiente de selección lineal
+
+```{r eval=TRUE, echo=FALSE}
+library(shiny)
+library(rgl)
+library(shinyRGL)
+library(mvtnorm)
+
+shinyApp(
+  
+  ui = fluidPage(
+     sidebarLayout(
+     sidebarPanel(
+       sliderInput("b1", label = "beta 1", min=-2, max=2, value = 0, step = 0.1),
+       sliderInput("b2", label = "beta 2", min=-2, max=2, value = 0, step = 0.1), 
+       sliderInput("b3", label = "beta 3", min=-2, max=2, value = 0, step = 0.1),  
+       width=3),
+    mainPanel(
+    webGLOutput("pob1"), width=7)
+  )),
+  
+  server = function(input, output) {
+    output$pob1 <- renderWebGL({
+
+X<-matrix(c(
+1,0,0,
+0,1,0,
+0,0,1),3,3)
+
+Y<-matrix(c(
+0.99, 0, 0,
+0, 0.99, 0,
+0, 0, 0.99),3,3)
+
+plot3d(ellipse3d(X, scale=c(1,1,1)), color="cyan2", box=F, axes=T,
+xlim=c(-5,5), ylim=c(-5,5), zlim=c(-5,5), alpha=0.6)
+
+plot3d(ellipse3d(Y, scale=c(1,1,1),centre = c(input$b1,input$b2,input$b3)), 
+color="red3", add=T, box=F, axes = F, alpha=0.6)
+    })
+  },
+  
+  options = list(height = 500)
+)
+```
+
+## $\gamma_{ii}$ Gradiente de selección cuadrática
+
+```{r eval=TRUE, echo=FALSE}
+library(shiny)
+library(rgl)
+library(shinyRGL)
+library(mvtnorm)
+
+shinyApp(
+  
+  ui = fluidPage(
+     sidebarLayout(
+     sidebarPanel(
+       sliderInput("g1", label = "gamma 1", min= -0.9, max=1, value = 0, step = 0.1),
+       sliderInput("g2", label = "gamma 2", min= -0.9, max=1, value = 0, step = 0.1), 
+       sliderInput("g3", label = "gamma 3", min= -0.9, max=1, value = 0, step = 0.1),  
+       width=3),
+    mainPanel(
+    webGLOutput("pob1"), width=7)
+  )),
+  
+  server = function(input, output) {
+    output$pob1 <- renderWebGL({
+
+X<-matrix(c(
+1,0,0,
+0,1,0,
+0,0,1),3,3)
+
+Y<-matrix(c(
+0.99+input$g1, 0, 0,
+0, 0.99+input$g2, 0,
+0, 0, 0.99+input$g3),3,3)
+
+plot3d(ellipse3d(X, scale=c(1,1,1)), color="cyan2", box=F, axes=T,
+xlim=c(-5,5), ylim=c(-5,5), zlim=c(-5,5), alpha=0.6)
+
+plot3d(ellipse3d(Y, scale=c(1,1,1),centre = c(0,0,0)), 
+color="red3", add=T, box=F, axes = F, alpha=0.6)
+    })
+  },
+  
+  options = list(height = 500)
+)
+```
+
+## $\gamma_{ij}$ Gradiente de selección correlacional
+
+```{r eval=TRUE, echo=FALSE}
+library(shiny)
+library(rgl)
+library(shinyRGL)
+library(mvtnorm)
+
+shinyApp(
+  
+  ui = fluidPage(
+     sidebarLayout(
+     sidebarPanel(
+       sliderInput("g12", label = "gamma 12", min= -0.9, max=1, value = 0, step = 0.1),
+       sliderInput("g13", label = "gamma 13", min= -0.9, max=1, value = 0, step = 0.1), 
+       sliderInput("g23", label = "gamma 23", min= -0.9, max=1, value = 0, step = 0.1),  
+       width=3),
+    mainPanel(
+    webGLOutput("pob1"), width=7)
+  )),
+  
+  server = function(input, output) {
+    output$pob1 <- renderWebGL({
+
+X<-matrix(c(
+1,0,0,
+0,1,0,
+0,0,1),3,3)
+
+Y<-matrix(c(
+0.99, 0+input$g12, 0+input$g13,
+0+input$g12, 0.99, 0+input$g23,
+0+input$g13, 0+input$g23, 0.99),3,3)
+
+plot3d(ellipse3d(X, scale=c(1,1,1)), color="cyan2", box=F, axes=T,
+xlim=c(-5,5), ylim=c(-5,5), zlim=c(-5,5), alpha=0.6)
+
+plot3d(ellipse3d(Y, scale=c(1,1,1),centre = c(0,0,0)), 
+color="red3", add=T, box=F, axes = F, alpha=0.6)
+    })
+  },
+  
+  options = list(height = 500)
+)
+```
+
 ***
