@@ -61,6 +61,7 @@ if(input$ale*input$genes < 31){
 
 ``` 
 
+
 # Selección sobre caracteres cuantitativos
 
 ## Diferenciales de selección |lineal $s_{i}$ y cuadrática $c_{i}$
@@ -173,7 +174,7 @@ grid.arrange(a, b, ncol=2)
 ``` 
 
 
-# Introduciendo la heredabilidad
+# Introducción a la heredabilidad|La ecuación de los criadores univariada.
 
 ##$\Delta \bar{z} = h^2 s$
 El cambio evolutivo depende de la heredabilidad y la selección
@@ -226,7 +227,7 @@ text(x= 0.5, y = -0.8, "selección")
 text(x= -1.5, y = 0.25, "respuesta")
 ```   
 
-#Introducinedo los gradientes de selección|Lande y Arnold (1983)
+#Introducción a los gradientes de selección|Lande y Arnold (1983)
 
 ## Lande & Arnold (1983)|The measurement of selection on correlated characteres.   
   
@@ -248,7 +249,6 @@ $\gamma_{ij}$ no lineal, correlacional
 library(shiny)
 library(rgl)
 library(shinyRGL)
-library(mvtnorm)
 
 shinyApp(
   
@@ -294,7 +294,6 @@ color="red3", add=T, box=F, axes = F, alpha=0.6)
 library(shiny)
 library(rgl)
 library(shinyRGL)
-library(mvtnorm)
 
 shinyApp(
   
@@ -380,4 +379,16 @@ color="red3", add=T, box=F, axes = F, alpha=0.6)
 )
 ```
 
-***
+## Para visualizar las aplicaciones|Siga las intrucciones en:
+
+* [MODELO INFITITESIMAL DE FISHER](https://github.com/santiagombv/complex.traits)
+* [DIFERENCIALES DE SELECCIÓN](https://github.com/santiagombv/selection.dif)
+* [DIFERENCIAL COMO COVARIANZA](https://github.com/santiagombv/selection.cov)
+* [RESPUESTA A LA SELECCIÓN](https://github.com/santiagombv/selection.her)
+* [GRADIENTES DE SELECCIÓN LINEAL](https://github.com/santiagombv/gradients.lin)
+* [GRADIENTES DE SELECCIÓN CUADRÁTICA](https://github.com/santiagombv/gradients.cua)
+* [GRADIENTES DE SELECCIÓN CORRELACIONAL](https://github.com/santiagombv/gradients.cor)
+
+
+
+
