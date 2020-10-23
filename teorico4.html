@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Santiago Benitez-Vieyra" />
+  <title>Métodos en Ecología Evolutiva</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="teorico4_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="teorico4_files/reveal.js-3.3.0.1/css/theme/serif.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Métodos en Ecología Evolutiva</h1>
+  <h1 class="subtitle">Restricciones</h1>
+    <h2 class="author">Santiago Benitez-Vieyra</h2>
+</section>
+
+<section id="section" class="slide level2">
+<h2></h2>
+<p>¿Si hay selección entonces por qué suceden estas cosas?</p>
+<p><img data-src="images/restricciones1.png" /></p>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+<ul>
+<li>Existe variabilidad genética en la mayoría de las poblaciones naturales
+<ul>
+<li><span class="math inline">\(h^2\)</span> elevadas<br />
+</li>
+<li>respuesta a la selección artificial<br />
+</li>
+</ul></li>
+<li>La selección en la naturaleza es fuerte
+<ul>
+<li>revisión de estudios de selección fenotípica<br />
+</li>
+<li>presencia de adaptación local<br />
+</li>
+<li>evolución rápida</li>
+</ul></li>
+</ul>
+<blockquote>
+<p>¿Porqué no se agota la variabilidad genética? ¿Por qué la tasa de evolución es generalmente tan lenta?</p>
+</blockquote>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<p>Entonces, ¿qué limita la respuesta a la selección?</p>
+<ul>
+<li>El carácter que medimos puede no existir… más que en nustra imaginación.<br />
+</li>
+<li>Las mutaciones adecuadas pueden ser raras.<br />
+</li>
+<li>Pueden existir <em>correlaciones genéticas</em> con otro carácter. Estructura de la matriz <strong>G</strong>.</li>
+</ul>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+<p><span class="math display">\[\mathbf{\Delta z} = \mathbf{G} \boldsymbol{\beta}\]</span></p>
+<p><span class="math display">\[\begin{bmatrix}
+\Delta z_1\\
+\Delta z_2\\
+\Delta z_3 
+\end{bmatrix} = \begin{bmatrix}
+var_1 &amp; cov_{1,2}  &amp; cov_{1,3} \\ 
+cov_{2,1} &amp; var_2  &amp; cov_{2,3}\\ 
+cov_{3,1} &amp; cov_{3,2} &amp; var_3
+\end{bmatrix} \times \begin{bmatrix}
+\beta_1\\
+\beta_2\\
+\beta_3 
+\end{bmatrix}\]</span></p>
+<blockquote>
+<p>De la misma forma que los elementos diagonales de G miden la capacidad de un carácter para responder a la selección (varianza genética aditiva), los elementos fuera de la diagonal miden en qué grado la evolución de un rasgo es acelerada o retardada por su coevolución con otro rasgo.</p>
+</blockquote>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<p><img data-src="images/G1.png" /></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>B &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>G &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>,</span>
+<span id="cb1-3"><a href="#cb1-3"></a>              <span class="fl">0.1</span>, <span class="fl">1.0</span>, <span class="fl">0.1</span>, </span>
+<span id="cb1-4"><a href="#cb1-4"></a>              <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">1.0</span>), <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a>G<span class="op">%*%</span>B</span></code></pre></div>
+<pre><code>##      [,1]
+## [1,] 0.24
+## [2,] 0.24
+## [3,] 0.24</code></pre>
+</section>
+<section id="section-5" class="slide level2">
+<h2></h2>
+<p><img data-src="images/G2.png" /></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>B &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>G &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">0.5</span>, <span class="fl">0.1</span>,</span>
+<span id="cb3-3"><a href="#cb3-3"></a>              <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">0.2</span>, </span>
+<span id="cb3-4"><a href="#cb3-4"></a>              <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">1.0</span>), <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>G<span class="op">%*%</span>B</span></code></pre></div>
+<pre><code>##      [,1]
+## [1,] 0.32
+## [2,] 0.34
+## [3,] 0.26</code></pre>
+</section>
+<section id="section-6" class="slide level2">
+<h2></h2>
+<p><img data-src="images/G3.png" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>B &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>G &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">-0.9</span>, <span class="fl">0.1</span>,</span>
+<span id="cb5-3"><a href="#cb5-3"></a>              <span class="fl">-0.9</span>, <span class="fl">1.0</span>, <span class="fl">0.2</span>, </span>
+<span id="cb5-4"><a href="#cb5-4"></a>              <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">1.0</span>), <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>G<span class="op">%*%</span>B</span></code></pre></div>
+<pre><code>##      [,1]
+## [1,] 0.04
+## [2,] 0.06
+## [3,] 0.26</code></pre>
+</section>
+<section id="section-7" class="slide level2">
+<h2></h2>
+<h3 id="adaptive-landscapes">Adaptive Landscapes</h3>
+<p><img data-src="images/landscape.gif" /></p>
+</section>
+<section id="section-8" class="slide level2">
+<h2></h2>
+<p><img data-src="images/landscape2.png" /></p>
+<blockquote>
+<p>Una matriz con correlaciones genéticas altas ve restringida su respuesta a la selección . La evolución ocurre en las <strong>líneas de mínima resistencia genética</strong>. (Dolph Schluter)</p>
+</blockquote>
+</section>
+<section id="section-9" class="slide level2">
+<h2></h2>
+<h3 id="evolvability">Evolvability</h3>
+<p><em>Habilidad de las poblaciones para evolucionar en la dirección de la selección.</em><br />
+Para un rasgo la evolvabilidad puede ser definida en forma operativa tanto en términos absolutos como condicionales, dependiendo si consideramos el resto de los rasgos sujetos a selección estabilizadora o no. (Hansen &amp; Houle 2008).</p>
+</section>
+<section id="section-10" class="slide level2" data-background="#e1f4a2">
+<h2></h2>
+<h3 id="métodos-para-estudiar-las-matrices-g">Métodos para estudiar las matrices <strong>G</strong></h3>
+<ul>
+<li>despomposición espectral (CPC)
+<ul>
+<li>constricciones absolutas<br />
+</li>
+<li>constricciones relativas<br />
+</li>
+</ul></li>
+<li>respuesta a la selección (selection skewers)</li>
+</ul>
+</section>
+<section id="section-11" class="slide level2">
+<h2></h2>
+<h3 id="a-través-de-su-estructura">A través de su estructura</h3>
+<p>La mayoría se basa en estudiar la geometría de G a través de la <em>descomposición espectral</em>. En ese caso:</p>
+<ul>
+<li>Los EIGENVECTORES establecen el sistema de coordenadas de G.<br />
+</li>
+<li>Los EIGENVALORES representan la variabilidad en cada uno de los ejes de G.</li>
+</ul>
+<p><span class="math display">\[\mathbf{G} = \lambda_1 e_1 e^T_1 + \lambda_2 e_2 e^T_2 + \lambda_3 e_3 e^T_3 + ...\]</span></p>
+</section>
+<section id="section-12" class="slide level2">
+<h2></h2>
+<ol type="1">
+<li>Determinar la existencia de constricciones absolutas</li>
+</ol>
+<p><img data-src="images/G3.png" /></p>
+<blockquote>
+<p>uno de los eigenvalores es cero</p>
+</blockquote>
+</section>
+<section id="section-13" class="slide level2">
+<h2></h2>
+<ol start="2" type="1">
+<li>Intensidad de las constricciones relativas</li>
+</ol>
+<ul>
+<li>Dispersión de los eigenvalores (<em>integración</em>): cuanto menor varianza de <span class="math inline">\(\lambda\)</span>, más esférica es <strong>G</strong> y presentará una menor constricción.</li>
+</ul>
+<p><img data-src="images/disp_G.png" /></p>
+</section>
+<section id="section-14" class="slide level2">
+<h2></h2>
+<h3 id="a-través-de-su-efecto-en-la-respuesta-a-la-selección">A través de su efecto en la respuesta a la selección</h3>
+<p>Ángulo entre <span class="math inline">\(\Delta z\)</span> (la respuesta a la selección) y <span class="math inline">\(\beta\)</span> (la selección lineal), real o simulada.</p>
+<p><img data-src="images/skewer.png" /></p>
+</section>
+<section id="section-15" class="slide level2">
+<h2></h2>
+<p><img data-src="images/cpc.png" /></p>
+</section>
+<section id="section-16" class="slide level2">
+<h2></h2>
+<p><img data-src="images/skewers2.png" /></p>
+</section>
+<section id="section-17" class="slide level2" data-background="#e1f4a2">
+<h2></h2>
+<h3 id="la-matriz-g-también-evoluciona">La matriz <strong>G</strong> también evoluciona</h3>
+</section>
+<section id="section-18" class="slide level2">
+<h2></h2>
+<h3 id="deriva">Deriva</h3>
+<p>Se espera que la reducción en el tamaño poblacional ocasione una <em>disminución proporcional</em> en todos los elementos de <strong>G</strong>.</p>
+</section>
+<section id="section-19" class="slide level2">
+<h2></h2>
+<h3 id="selección">Selección</h3>
+<p>Se espera que la matriz <strong>G</strong> se alinee con la dirección de la selección, por lo que esperamos un <em>cambio en su orientación</em>.</p>
+</section>
+<section id="section-20" class="slide level2">
+<h2></h2>
+<h3 id="mutación">Mutación</h3>
+<p>Se espera que la evolución a largo plazo de <strong>G</strong> esté dominada por el matrón de mutaciones pleiotrópicas (matriz <strong>M</strong>).</p>
+</section>
+<section id="section-21" class="slide level2">
+<h2></h2>
+<p>¿Cómo resuelve la evolución un problema con sai infinitas dimensiones?</p>
+<p><img data-src="images/microscopio.jpg" /></p>
+</section>
+<section id="section-22" class="slide level2">
+<h2></h2>
+<h3 id="la-gran-respuesta-modularidad">La gran respuesta: Modularidad!</h3>
+<p><img data-src="images/modularidad.png" /></p>
+</section>
+<section id="section-23" class="slide level2" data-background="#e1f4a2">
+<h2></h2>
+<h3 id="algunas-consideraciones-adicionales">Algunas consideraciones adicionales</h3>
+</section>
+<section id="section-24" class="slide level2">
+<h2></h2>
+<ul>
+<li><strong>G</strong> es una medida local, propia de una población y cierto ambiente.<br />
+</li>
+<li>A lo largo de la evolución cambian las frecuencias génicas, ergo <strong>G</strong> también cambia.<br />
+</li>
+<li><strong>G</strong> es una matriz de correlación. Algo causa las <strong>G</strong> que observamos (pensemos en el problema similar de determinar las causas de la selección).</li>
+</ul>
+</section>
+<section id="section-25" class="slide level2">
+<h2></h2>
+<ul>
+<li>Todo rasgo es producto de múltiples causas. La dicotomía genes / ambiente es sólo una de las forma de dividirlas.<br />
+</li>
+<li>Un organismo hereda una gran cantidad de recursos que interactúan para construir el ciclo de vida del organismo.<br />
+</li>
+<li>El desarrollo es una construcción de los rasgos.<br />
+</li>
+<li>La evolución es un proceso de interacción entre el organismo y el ambiente.</li>
+</ul>
+<blockquote>
+<p>Las cascadas de desarrollo son los principales responsables de las correlacione observadas entre los rasgos.</p>
+</blockquote>
+</section>
+<section id="section-26" class="slide level2">
+<h2></h2>
+<ul>
+<li>Constricciones genéticas impuestas por la arquitectura génica del sistema de desarrollo.<br />
+</li>
+<li>Constricciones debidas a la selección natural interna (para mantener la coherencia interna en el desarrollo)</li>
+</ul>
+<p><img data-src="images/unicornio.png" /></p>
+</section>
+<section id="section-27" class="slide level2">
+<h2></h2>
+<p><img data-src="images/rinoceronte.png" /></p>
+</section>
+<section id="end" class="slide level2">
+<h2>END</h2>
+</section>
+    </div>
+  </div>
+
+  <script src="teorico4_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="teorico4_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: true,
+        // Transition style
+        transition: 'concave', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
